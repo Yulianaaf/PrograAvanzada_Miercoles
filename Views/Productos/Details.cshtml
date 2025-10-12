@@ -1,0 +1,15 @@
+﻿@model MyPymeStore.Models.Producto
+
+<h2>Detalle Producto</h2>
+
+<div class="card p-3">
+    <p><strong>Id:</strong> @Model.IdProducto</p>
+    <p><strong>Nombre:</strong> @Model.Nombre</p>
+    <p><strong>Descripcion:</strong> @Model.Descripcion</p>
+    <p><strong>Precio:</strong> @Model.Precio</p>
+    <p><strong>Stock:</strong> @Model.Stock</p>
+    <p><strong>Categoria:</strong> @Model.Categoria?.Nombre</p>
+    <p><strong>Fecha Registro:</strong> @Model.FechaRegistro.ToShortDateString()</p>
+</div>
+
+<a class="btn btn-primary mt-2" href="/Productos/GestionProductos">Volver</a>

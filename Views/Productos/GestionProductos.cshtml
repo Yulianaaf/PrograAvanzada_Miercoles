@@ -1,0 +1,36 @@
+﻿@model IEnumerable<MyPymeStore.Models.Producto>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Gestión de Productos</h2>
+    <a class="btn btn-primary" href="/Productos/Create">Agregar Producto</a>
+</div>
+
+<table class="table table-striped table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Categoria</th>
+            <th>Fecha Registro</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.IdProducto</td>
+                <td>@item.Nombre</td>
+                <td>@item.Precio</td>
+                <td>@item.Stock</td>
+                <td>@item.Categoria?.Nombre</td>
+                <td>@item.FechaRegistro.ToShortDateString()</td>
+                <td>
+                    <a class="btn btn-info btn-sm" href="/Productos/Details/@item.IdProducto">Detalles</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
