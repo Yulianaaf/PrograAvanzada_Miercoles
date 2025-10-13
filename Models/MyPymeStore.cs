@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Reflection.Emit;
 
 namespace MyPymeStore.Models
 {
@@ -14,13 +12,15 @@ namespace MyPymeStore.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Categoria>().HasKey(c => c.IdCategoria);
-            modelBuilder.Entity<Producto>().HasKey(p => p.IdProducto);
+            
+            modelBuilder.Entity<Categoria>().HasKey(c => c.Id);
+            modelBuilder.Entity<Producto>().HasKey(p => p.Id);
 
+            
             modelBuilder.Entity<Producto>()
                 .HasOne(p => p.Categoria)
                 .WithMany(c => c.Productos)
-                .HasForeignKey(p => p.IdCategoria);
+                .HasForeignKey(p => p.CategoriaId);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -7,21 +7,23 @@
         <label asp-for="Nombre"></label>
         <input asp-for="Nombre" class="form-control" />
     </div>
-    <div class="form-group">
-        <label asp-for="Descripcion"></label>
-        <input asp-for="Descripcion" class="form-control" />
-    </div>
+
     <div class="form-group">
         <label asp-for="Precio"></label>
         <input asp-for="Precio" class="form-control" />
     </div>
+
     <div class="form-group">
         <label asp-for="Stock"></label>
         <input asp-for="Stock" class="form-control" />
     </div>
+
     <div class="form-group">
-        <label asp-for="IdCategoria">Id Categoria</label>
-        <input asp-for="IdCategoria" class="form-control" />
+        <label asp-for="CategoriaId">Categoría</label>
+        <select asp-for="CategoriaId" class="form-control" asp-items="ViewBag.Categorias">
+            <option value="">-- Selecciona una categoría --</option>
+        </select>
     </div>
+
     <button type="submit" class="btn btn-success mt-2">Guardar</button>
 </form>

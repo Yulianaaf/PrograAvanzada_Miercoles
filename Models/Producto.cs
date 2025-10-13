@@ -1,31 +1,41 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyPymeStore.Models
 {
+    [Table("Producto")]
     public class Producto
     {
         [Key]
-        public int IdProducto { get; set; }
+        [Column("id")]  
+        public int Id { get; set; }
 
         [Required]
+        [Column("nombre")]
         public string Nombre { get; set; }
 
-        public string Descripcion { get; set; }
+        [Column("categoriaId")]
+        public int CategoriaId { get; set; }
 
         [Required]
-        [Column(TypeName = "decimal(10,2)")]
+        [Column("precio", TypeName = "decimal(10,2)")]
         public decimal Precio { get; set; }
 
+        [Column("impuestosPorCompra", TypeName = "decimal(10,2)")]
+        public decimal ImpuestosPorCompra { get; set; }
+
         [Required]
+        [Column("stock")]
         public int Stock { get; set; }
 
-        public DateTime FechaRegistro { get; set; } = DateTime.Now;
+        [Column("imagenUrl")]
+        public string? ImagenUrl { get; set; }
 
-        [Required]
-        public int IdCategoria { get; set; }
+        [Column("activo")]
+        public bool Activo { get; set; }
 
-        public Categoria Categoria { get; set; }
+        
+        [ForeignKey("CategoriaId")]
+        public Categoria? Categoria { get; set; }
     }
 }
