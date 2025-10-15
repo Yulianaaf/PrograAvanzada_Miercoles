@@ -1,0 +1,48 @@
+﻿@model MyPymeStore.Models.Cliente
+
+<h2>Agregar Cliente</h2>
+
+<form asp-action="Create" method="post">
+    <!-- Nombre -->
+    <div class="form-group mb-3">
+        <label asp-for="Nombre"></label>
+        <input asp-for="Nombre" class="form-control" required />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
+    </div>
+
+    <!-- Cédula -->
+    <div class="form-group mb-3">
+        <label asp-for="Cedula"></label>
+        <input asp-for="Cedula" class="form-control" required />
+        <span asp-validation-for="Cedula" class="text-danger"></span>
+    </div>
+
+    <!-- Correo -->
+    <div class="form-group mb-3">
+        <label asp-for="Correo"></label>
+        <input asp-for="Correo" type="email" class="form-control" required />
+        <span asp-validation-for="Correo" class="text-danger"></span>
+    </div>
+
+    <!-- Teléfono -->
+    <div class="form-group mb-3">
+        <label asp-for="Telefono"></label>
+        <input asp-for="Telefono" class="form-control" required />
+        <span asp-validation-for="Telefono" class="text-danger"></span>
+    </div>
+
+    <!-- Dirección -->
+    <div class="form-group mb-3">
+        <label asp-for="Direccion"></label>
+        <textarea asp-for="Direccion" class="form-control" rows="3" required></textarea>
+        <span asp-validation-for="Direccion" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-2">Guardar</button>
+    <a asp-action="GestionClientes" class="btn btn-secondary mt-2">Volver</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

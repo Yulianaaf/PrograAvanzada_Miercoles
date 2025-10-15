@@ -1,0 +1,163 @@
+﻿@model IEnumerable<MyPymeStore.Models.Cliente>
+@{
+    ViewBag.Title = "Gestión de Clientes";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Gestión de Clientes</h2>
+    <a class="btn btn-primary" href="/Clientes/Create">Agregar Cliente</a>
+</div>
+
+<!-- Filtros -->
+<form method="get" class="row g-3 mb-3">
+    <div class="col-md-4">
+        <input type="text" name="searchName" class="form-control" placeholder="Buscar por nombre" value="@ViewBag.CurrentName" />
+    </div>
+    <div class="col-md-4">
+        <input type="text" name="searchCedula" class="form-control" placeholder="Buscar por cédula" value="@ViewBag.CurrentCedula" />
+    </div>
+    <div class="col-md-4">
+        <button type="submit" class="btn btn-secondary">Filtrar</button>
+    </div>
+</form>
+
+<table class="table table-striped table-bordered table-hover" id="clientesTable">
+    <thead class="table-dark">
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Cédula</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Dirección</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr id="clienteRow-@item.Id">
+                <td>@item.Id</td>
+                <td class="nombre">@item.Nombre</td>
+                <td class="cedula">@item.Cedula</td>
+                <td class="correo">@item.Correo</td>
+                <td class="telefono">@item.Telefono</td>
+                <td class="direccion">@item.Direccion</td>
+                <td>
+                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#editModal-@item.Id">Editar</button>
+                    <button class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal-@item.Id">Detalle</button>
+                    <form asp-action="DeleteConfirmed" method="post" style="display:inline-block" onsubmit="return confirm('¿Seguro que deseas eliminar este cliente?');">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+
+            <!-- Modal de edición -->
+            <div class="modal fade" id="editModal-@item.Id" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form class="edit-client-form" data-clientid="@item.Id">
+                            @Html.AntiForgeryToken()
+                            <div class="modal-header">
+                                <h5 class="modal-title">Editar Cliente</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <input type="hidden" name="Id" value="@item.Id" />
+
+                                <div class="mb-2">
+                                    <label>Nombre</label>
+                                    <input name="Nombre" class="form-control" value="@item.Nombre" required />
+                                </div>
+
+                                <div class="mb-2">
+                                    <label>Cédula</label>
+                                    <input name="Cedula" class="form-control" value="@item.Cedula" required />
+                                </div>
+
+                                <div class="mb-2">
+                                    <label>Correo</label>
+                                    <input type="email" name="Correo" class="form-control" value="@item.Correo" placeholder="correo@ejemplo.com" required />
+                                </div>
+
+                                <div class="mb-2">
+                                    <label>Teléfono</label>
+                                    <input name="Telefono" class="form-control" value="@item.Telefono" required />
+                                </div>
+
+                                <div class="mb-2">
+                                    <label>Dirección</label>
+                                    <input name="Direccion" class="form-control" value="@item.Direccion" required />
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-success">Guardar</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de detalle -->
+            <div class="modal fade" id="detailModal-@item.Id" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Detalle Cliente</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Nombre:</strong> @item.Nombre</p>
+                            <p><strong>Cédula:</strong> @item.Cedula</p>
+                            <p><strong>Correo:</strong> @item.Correo</p>
+                            <p><strong>Teléfono:</strong> @item.Telefono</p>
+                            <p><strong>Dirección:</strong> @item.Direccion</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </tbody>
+</table>
+
+<!-- Script AJAX para editar clientes -->
+<script>
+    (function () {
+        function getRequestVerificationToken(form) {
+            const tokenInput = form.querySelector('input[name="__RequestVerificationToken"]');
+            return tokenInput ? tokenInput.value : null;
+        }
+
+        document.querySelectorAll('.edit-client-form').forEach(form => {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const formData = new FormData(form);
+                const token = getRequestVerificationToken(form);
+
+                fetch('/Clientes/Edit', {
+                    method: 'POST',
+                    headers: token ? { 'RequestVerificationToken': token } : {},
+                    body: formData
+                })
+                .then(res => {
+                    if(res.ok) {
+                        // 🔹 Recargar la página para ver los cambios
+                        location.reload();
+                    } else {
+                        alert('Error al guardar el cliente');
+                    }
+                })
+                .catch(err => console.log('AJAX finalize', err));
+            });
+        });
+    })();
+</script>
